@@ -1,3 +1,75 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* Estilos personalizados para o slider */
+.product-slider .slick-track {
+  margin-left: 0;
+  margin-right: 0;
+}
+
+.product-slider .slick-slide {
+  padding: 8px;
+}
+
+.product-slider .slick-dots {
+  bottom: -35px;
+}
+
+.product-slider .slick-dots li button:before {
+  font-size: 8px;
+  color: #3b82f6;
+  opacity: 0.25;
+}
+
+.product-slider .slick-dots li.slick-active button:before {
+  opacity: 1;
+  color: #3b82f6;
+}
+
+.product-slider .slick-prev,
+.product-slider .slick-next {
+  width: 40px;
+  height: 40px;
+  background-color: white;
+  border-radius: 50%;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  z-index: 10;
+  transition: all 0.2s;
+}
+
+.product-slider .slick-prev {
+  left: -20px;
+}
+
+.product-slider .slick-next {
+  right: -20px;
+}
+
+.product-slider .slick-prev:hover,
+.product-slider .slick-next:hover {
+  background-color: white;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transform: scale(1.1);
+}
+
+.product-slider .slick-prev:before,
+.product-slider .slick-next:before {
+  color: #3b82f6;
+  opacity: 1;
+}
+
+/* Adiciona uma transição suave ao hover dos cards */
+.transform {
+  transition-property: transform;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 300ms;
+}
+
+/* Limita o número de linhas do título do produto */
+.line-clamp-2 {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
