@@ -1,74 +1,86 @@
-import React from 'react';
-import './Cart.css';
-import type { CartItem } from '../types/types';
+import { useCart } from '../context/CartContext';
+import { Link } from 'react-router-dom';
 
-interface CartProps {
-  items: CartItem[];
-  onRemove: (id: number) => void;
-}
+export default function Cart() {
+  const { cart, removeFromCart, updateQuantity, total } = useCart();
 
-const Cart: React.FC<CartProps> = ({ items, onRemove }) => {
-  const totalPrice = items.reduce(
-    (total, item) => total + item.product.price * item.quantity,
-    0
-  );
+  if (cart.length === 0) {
+    return (
+      <div className="text-center py-8">
+        <h2 className="text-2xl font-bold mb-4">Your cart is empty</h2>
+        <Link
+          to="/"
+          className="text-blue-500 hover:text-blue-600 underline"
+        >
+          Continue Shopping
+        </Link>
+      </div>
+    );
+  }
 
   return (
-    // ...dentro do seu componente Cart
-<div className="cart-container">
-  <h2 className="cart-title">Shopping Cart</h2>
-  {items.length === 0 ? (
-    <p className="cart-empty">Your cart is empty.</p>
-  ) : (
-    <div className="cart-grid">
-      <div>
-        <ul className="cart-items">
-          {items.map((item) => (
-            <li key={item.product.id} className="cart-item">
-              <div className="cart-item-details">
-                <img
-                  src={item.product.imageUrl}
-                  alt={item.product.name}
-                  className="cart-item-image"
-                />
-                <div className="cart-item-info">
-                  <h3>{item.product.name}</h3>
-                  <p>${item.product.price.toFixed(2)} x {item.quantity}</p>
-                  <p>Subtotal: ${(item.product.price * item.quantity).toFixed(2)}</p>
-                </div>
+    <div className="max-w-4xl mx-auto">
+      <h2 className="text-2xl font-bold mb-6">Shopping Cart</h2>
+      <div className="bg-white rounded-lg shadow-md p-6">
+        {cart.map(item => (
+          <div
+            key={item.id}
+            className="flex items-center py-4 border-b last:border-b-0"
+          >
+            <img
+              src={item.image}
+              alt={item.title}
+              className="w-24 h-24 object-contain"
+            />
+            <div className="flex-1 ml-4">
+              <h3 className="text-lg font-semibold">{item.title}</h3>
+              <p className="text-gray-600">${item.price.toFixed(2)}</p>
+              <div className="flex items-center mt-2">
+                <button
+                  onClick={() => updateQuantity(item.id, item.quantity - 1)}
+                  className="px-2 py-1 border rounded-l"
+                >
+                  -
+                </button>
+                <span className="px-4 py-1 border-t border-b">
+                  {item.quantity}
+                </span>
+                <button
+                  onClick={() => updateQuantity(item.id, item.quantity + 1)}
+                  className="px-2 py-1 border rounded-r"
+                >
+                  +
+                </button>
+                <button
+                  onClick={() => removeFromCart(item.id)}
+                  className="ml-4 text-red-500 hover:text-red-600"
+                >
+                  Remove
+                </button>
               </div>
-              <button
-                onClick={() => onRemove(item.product.id)}
-                className="cart-remove-btn"
-              >
-                Remove
-              </button>
-            </li>
-          ))}
-        </ul>
-      </div>
-      <div className="cart-summary">
-        <h3 className="cart-summary-title">Order Summary</h3>
-        <div className="cart-summary-row">
-          <span>Items:</span>
-          <span>${totalPrice.toFixed(2)}</span>
+            </div>
+            <div className="text-right ml-4">
+              <p className="font-semibold">
+                ${(item.price * item.quantity).toFixed(2)}
+              </p>
+            </div>
+          </div>
+        ))}
+        <div className="mt-6 border-t pt-6">
+          <div className="flex justify-between items-center">
+            <span className="text-xl font-bold">Total:</span>
+            <span className="text-2xl font-bold">${total.toFixed(2)}</span>
+          </div>
+          <div className="mt-6 flex justify-end">
+            <Link
+              to="/checkout"
+              className="bg-blue-500 text-white px-6 py-3 rounded hover:bg-blue-600 transition-colors"
+            >
+              Proceed to Checkout
+            </Link>
+          </div>
         </div>
-        <div className="cart-summary-row">
-          <span>Shipping:</span>
-          <span>Free</span>
-        </div>
-        <div className="cart-summary-total">
-          <span>Total:</span>
-          <span>${totalPrice.toFixed(2)}</span>
-        </div>
-        <button className="cart-checkout-btn">
-          Proceed to Checkout
-        </button>
       </div>
     </div>
-  )}
-</div>
   );
-};
-
-export default Cart;
+} 
