@@ -1,4 +1,6 @@
-import { createContext, useContext, useState, ReactNode } from "react";
+import { createContext, useContext, useState } from "react";
+import type { ReactNode } from "react";
+import toast from "react-hot-toast";
 
 interface Product {
   id: number;
@@ -23,25 +25,31 @@ export function CartProvider({ children }: { children: ReactNode }) {
   const [cart, setCart] = useState<Product[]>([]);
 
   const addToCart = (product: Product) => {
-    setCart((currentCart) => {
-      const existingProduct = currentCart.find(
-        (item) => item.id === product.id
-      );
-      if (existingProduct) {
-        return currentCart.map((item) =>
+    const existingProduct = cart.find((item) => item.id === product.id);
+    
+    if (existingProduct) {
+      setCart(currentCart =>
+        currentCart.map((item) =>
           item.id === product.id
             ? { ...item, quantity: item.quantity + 1 }
             : item
-        );
-      }
-      return [...currentCart, { ...product, quantity: 1 }];
-    });
+        )
+      );
+      toast.success(`Quantidade de ${product.title} atualizada no carrinho!`);
+    } else {
+      setCart(currentCart => [...currentCart, { ...product, quantity: 1 }]);
+      toast.success(`${product.title} adicionado ao carrinho!`);
+    }
   };
 
   const removeFromCart = (productId: number) => {
-    setCart((currentCart) =>
-      currentCart.filter((item) => item.id !== productId)
-    );
+    const product = cart.find(item => item.id === productId);
+    if (product) {
+      toast.success(`${product.title} removido do carrinho!`);
+      setCart((currentCart) =>
+        currentCart.filter((item) => item.id !== productId)
+      );
+    }
   };
 
   const updateQuantity = (productId: number, quantity: number) => {

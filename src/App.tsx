@@ -1,5 +1,6 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { useState } from "react";
+import { Toaster } from "react-hot-toast";
 import Navbar from "./components/navbar";
 import Products from "./components/Products";
 import Cart from "./components/Cart";
@@ -11,6 +12,7 @@ function App() {
     <CartProvider>
       <Router>
         <div className="min-h-screen bg-gray-100">
+          <Toaster position="top-center" />
           <Navbar />
           <div className="container mx-auto px-4 py-8">
             <Routes>
