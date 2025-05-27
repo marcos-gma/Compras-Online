@@ -1,12 +1,12 @@
 # 🛍️ Amazona - E-commerce
 
-<div align="center">
 
 Um e-commerce moderno desenvolvido com React e TypeScript, inspirado na Amazon, oferecendo uma experiência de compra intuitiva e agradável.
 
-<img src="src/assets/mascot.png" alt="Amazona Logo" width="200" style="margin: 20px auto;">
+<p align="center">
+  <img src="src/assets/mascot.png" alt="Amazona Logo" width="200" style="margin: 20px auto;">
+</p>
 
-</div>
 
 ## ✨ Características
 
@@ -66,11 +66,6 @@ O Amazona é um e-commerce que oferece uma ampla variedade de produtos, desde el
 - React Router
 - Context API
 - Vite
-
-## 📝 Licença
-
-Este projeto está sob a licença MIT. Veja o arquivo [LICENSE](LICENSE) para mais detalhes.
-
 ---
 
 Desenvolvido com 💙
