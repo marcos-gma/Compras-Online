@@ -1,6 +1,6 @@
 # 🛍️ Amazona - E-commerce
 
-Um e-commerce moderno desenvolvido com React e TypeScript, inspirado na Amazon, oferecendo uma experiência de compra intuitiva e agradável.
+Um e-commerce moderno e sem enrolação, inspirado na Amazon e desenvolvido com React e TypeScript, oferecendo uma experiência de compra fácil e agradável.
 
 ![Amazona Logo](src/assets/mascot.png)
 
