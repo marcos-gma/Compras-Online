@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useCart } from '../context/CartContext';
+import { useFavorites } from '../context/FavoritesContext';
 import Slider from 'react-slick';
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
@@ -72,6 +73,7 @@ export default function Products() {
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
   const [categorySections, setCategorySections] = useState<CategorySection[]>([]);
   const { addToCart } = useCart();
+  const { toggleFavorite, isFavorite } = useFavorites();
 
   // Busca produtos da API e organiza por categorias
   useEffect(() => {
@@ -202,7 +204,7 @@ export default function Products() {
               {section.products.map(product => (
                 <div key={product.id} className="px-2">
                   <div 
-                    className="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-300 transform hover:-translate-y-1"
+                    className="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-300"
                   >
                     <div 
                       onClick={() => openModal(product)}
@@ -264,14 +266,43 @@ export default function Products() {
                         <span className="text-xl font-bold text-blue-600">
                           R${product.price.toFixed(2)}
                         </span>
-                        <button
-                          onClick={(e) => handleAddToCart(e, product)}
-                          className="bg-blue-600 text-white p-2 rounded-lg hover:bg-blue-700 transition-colors"
-                        >
-                          <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
-                          </svg>
-                        </button>
+                        <div className="flex space-x-2">
+                          <button
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              toggleFavorite(product);
+                            }}
+                            className={`p-2 rounded-lg transition-colors ${
+                              isFavorite(product.id)
+                                ? "text-red-500 hover:bg-red-50"
+                                : "text-gray-400 hover:text-red-500 hover:bg-red-50"
+                            }`}
+                            title={isFavorite(product.id) ? "Remover dos favoritos" : "Adicionar aos favoritos"}
+                          >
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              className="h-6 w-6"
+                              fill={isFavorite(product.id) ? "currentColor" : "none"}
+                              viewBox="0 0 24 24"
+                              stroke="currentColor"
+                            >
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                strokeWidth={2}
+                                d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
+                              />
+                            </svg>
+                          </button>
+                          <button
+                            onClick={(e) => handleAddToCart(e, product)}
+                            className="bg-blue-600 text-white p-2 rounded-lg hover:bg-blue-700 transition-colors"
+                          >
+                            <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+                            </svg>
+                          </button>
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -298,24 +329,50 @@ export default function Products() {
                   <h2 className="text-2xl font-bold text-gray-800">{selectedProduct.title}</h2>
                   <p className="text-blue-600 font-medium">{selectedProduct.brand}</p>
                 </div>
-                <button
-                  onClick={closeModal}
-                  className="text-gray-500 hover:text-gray-700 transition-colors"
-                >
-                  <svg
-                    className="w-6 h-6"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
+                <div className="flex space-x-2">
+                  <button
+                    onClick={() => toggleFavorite(selectedProduct)}
+                    className={`p-2 rounded-lg transition-colors ${
+                      isFavorite(selectedProduct.id)
+                        ? "text-red-500 hover:bg-red-50"
+                        : "text-gray-400 hover:text-red-500 hover:bg-red-50"
+                    }`}
+                    title={isFavorite(selectedProduct.id) ? "Remover dos favoritos" : "Adicionar aos favoritos"}
                   >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="2"
-                      d="M6 18L18 6M6 6l12 12"
-                    />
-                  </svg>
-                </button>
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="h-6 w-6"
+                      fill={isFavorite(selectedProduct.id) ? "currentColor" : "none"}
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
+                      />
+                    </svg>
+                  </button>
+                  <button
+                    onClick={closeModal}
+                    className="text-gray-500 hover:text-gray-700 transition-colors"
+                  >
+                    <svg
+                      className="w-6 h-6"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth="2"
+                        d="M6 18L18 6M6 6l12 12"
+                      />
+                    </svg>
+                  </button>
+                </div>
               </div>
               
               <div>

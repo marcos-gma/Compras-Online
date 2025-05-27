@@ -2,7 +2,9 @@
 
 Um e-commerce moderno desenvolvido com React e TypeScript, inspirado na Amazon, oferecendo uma experiência de compra intuitiva e agradável.
 
-<img src="src/assets/mascot.png" alt="Amazona Logo" width="150" style="margin: 20px auto; display: block;">
+<p align="center">
+  <img src="src/assets/mascot.png" alt="Amazona Logo" width="200" style="margin: 20px auto;">
+</p>
 
 ## ✨ Características
 
