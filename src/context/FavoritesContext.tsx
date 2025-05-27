@@ -1,4 +1,4 @@
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext, useState, useEffect } from "react";
 import type { ReactNode } from "react";
 import toast from "react-hot-toast";
 
@@ -25,7 +25,7 @@ interface FavoritesContextType {
 // Criação do contexto com valor inicial
 const FavoritesContext = createContext<FavoritesContextType | undefined>(undefined);
 
-// Hook para usar o contexto dos favoritos
+// Hook personalizado para usar o contexto dos favoritos
 export function useFavorites() {
   const context = useContext(FavoritesContext);
   if (context === undefined) {
@@ -36,7 +36,16 @@ export function useFavorites() {
 
 // Provider que gerencia o estado dos favoritos
 export function FavoritesProvider({ children }: { children: ReactNode }) {
-  const [favorites, setFavorites] = useState<Product[]>([]);
+  // Inicializa os favoritos com dados do localStorage, se existirem
+  const [favorites, setFavorites] = useState<Product[]>(() => {
+    const savedFavorites = localStorage.getItem('amazona-favorites');
+    return savedFavorites ? JSON.parse(savedFavorites) : [];
+  });
+
+  // Salva os favoritos no localStorage sempre que houver mudanças
+  useEffect(() => {
+    localStorage.setItem('amazona-favorites', JSON.stringify(favorites));
+  }, [favorites]);
 
   // Adiciona ou remove um produto dos favoritos
   const toggleFavorite = (product: Product) => {

@@ -1,4 +1,4 @@
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext, useState, useEffect } from "react";
 import type { ReactNode } from "react";
 import toast from "react-hot-toast";
 
@@ -35,7 +35,16 @@ export function useCart() {
 
 // Provider que gerencia o estado do carrinho
 export function CartProvider({ children }: { children: ReactNode }) {
-  const [cart, setCart] = useState<Product[]>([]);
+  // Inicializa o carrinho com dados do localStorage, se existirem
+  const [cart, setCart] = useState<Product[]>(() => {
+    const savedCart = localStorage.getItem('amazona-cart');
+    return savedCart ? JSON.parse(savedCart) : [];
+  });
+
+  // Salva o carrinho no localStorage sempre que houver mudanças
+  useEffect(() => {
+    localStorage.setItem('amazona-cart', JSON.stringify(cart));
+  }, [cart]);
 
   // Adiciona ou atualiza produto no carrinho
   const addToCart = (product: Product) => {
