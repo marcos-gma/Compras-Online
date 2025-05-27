@@ -25,7 +25,7 @@ interface FavoritesContextType {
 // Criação do contexto com valor inicial
 const FavoritesContext = createContext<FavoritesContextType | undefined>(undefined);
 
-// Hook personalizado para usar o contexto dos favoritos
+// Hook para usar o contexto dos favoritos
 export function useFavorites() {
   const context = useContext(FavoritesContext);
   if (context === undefined) {

@@ -1,6 +1,5 @@
 # 🛍️ Amazona - E-commerce
 
-
 Um e-commerce moderno desenvolvido com React e TypeScript, inspirado na Amazon, oferecendo uma experiência de compra intuitiva e agradável.
 
 <p align="center">
@@ -11,6 +10,7 @@ Um e-commerce moderno desenvolvido com React e TypeScript, inspirado na Amazon, 
 
 - 🎨 Interface moderna e responsiva
 - 🛒 Carrinho de compras funcional
+- ❤️ Lista de favoritos personalizada
 - 📱 Design adaptável para dispositivos móveis
 - 🔍 Visualização detalhada de produtos
 - 📦 Categorização inteligente de produtos
@@ -57,6 +57,22 @@ O Amazona é um e-commerce que oferece uma ampla variedade de produtos, desde el
 - **Design**: Visual moderno e atraente
 - **Responsividade**: Adaptável a diferentes tamanhos de tela
 
+### 🌟 Funcionalidades Principais
+
+#### 🛍️ Compras
+- Navegue por diferentes categorias de produtos
+- Visualize detalhes completos dos produtos
+- Adicione itens ao carrinho
+- Gerencie quantidades no carrinho
+- Processo de checkout simplificado
+
+#### ❤️ Lista de Favoritos
+- Favorite produtos que você mais gosta
+- Acesse rapidamente sua lista de favoritos
+- Gerencie seus itens favoritos facilmente
+- Adicione produtos favoritos ao carrinho
+- Notificações de confirmação ao favoritar/desfavoritar
+
 ## 🛠️ Tecnologias Utilizadas
 
 - React
@@ -65,6 +81,11 @@ O Amazona é um e-commerce que oferece uma ampla variedade de produtos, desde el
 - React Router
 - Context API
 - Vite
+
+## 📝 Licença
+
+Este projeto está sob a licença MIT. Veja o arquivo [LICENSE](LICENSE) para mais detalhes.
+
 ---
 
 Desenvolvido com 💙

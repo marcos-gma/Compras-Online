@@ -99,7 +99,7 @@ export default function Favorites() {
                     </span>
                     <div className="flex space-x-2">
                       <button
-                        onClick={() => addToCart({ ...product, quantity: 1 })}
+                        onClick={() => addToCart({ ...product, quantity: 1, image: product.thumbnail })}
                         className="bg-blue-600 text-white p-2 rounded-lg hover:bg-blue-700 transition-colors"
                         title="Adicionar ao carrinho"
                       >
