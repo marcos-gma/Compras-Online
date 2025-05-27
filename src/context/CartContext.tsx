@@ -2,6 +2,7 @@ import { createContext, useContext, useState } from "react";
 import type { ReactNode } from "react";
 import toast from "react-hot-toast";
 
+// Interface para os produtos no carrinho
 interface Product {
   id: number;
   title: string;
@@ -10,6 +11,7 @@ interface Product {
   quantity: number;
 }
 
+// Tipo para o contexto do carrinho
 interface CartContextType {
   cart: Product[];
   addToCart: (product: Product) => void;
@@ -19,11 +21,23 @@ interface CartContextType {
   total: number;
 }
 
+// Criação do contexto com valor inicial
 const CartContext = createContext<CartContextType | undefined>(undefined);
 
+// Hook personalizado para usar o contexto do carrinho
+export function useCart() {
+  const context = useContext(CartContext);
+  if (context === undefined) {
+    throw new Error("useCart must be used within a CartProvider");
+  }
+  return context;
+}
+
+// Provider que gerencia o estado do carrinho
 export function CartProvider({ children }: { children: ReactNode }) {
   const [cart, setCart] = useState<Product[]>([]);
 
+  // Adiciona ou atualiza produto no carrinho
   const addToCart = (product: Product) => {
     const existingProduct = cart.find((item) => item.id === product.id);
     
@@ -42,6 +56,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
     }
   };
 
+  // Remove produto do carrinho
   const removeFromCart = (productId: number) => {
     const product = cart.find(item => item.id === productId);
     if (product) {
@@ -52,6 +67,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
     }
   };
 
+  // Atualiza a quantidade de um produto
   const updateQuantity = (productId: number, quantity: number) => {
     if (quantity < 1) {
       removeFromCart(productId);
@@ -64,8 +80,10 @@ export function CartProvider({ children }: { children: ReactNode }) {
     );
   };
 
+  // Limpa todo o carrinho
   const clearCart = () => {
     setCart([]);
+    toast.success("Carrinho limpo!");
   };
 
   const total = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
@@ -84,12 +102,4 @@ export function CartProvider({ children }: { children: ReactNode }) {
       {children}
     </CartContext.Provider>
   );
-}
-
-export function useCart() {
-  const context = useContext(CartContext);
-  if (context === undefined) {
-    throw new Error("useCart must be used within a CartProvider");
-  }
-  return context;
 }

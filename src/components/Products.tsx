@@ -4,6 +4,7 @@ import Slider from 'react-slick';
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 
+// Interface que define a estrutura de um produto
 interface Product {
   id: number;
   title: string;
@@ -18,6 +19,7 @@ interface Product {
   stock: number;
 }
 
+// Tradução das categorias para português
 const categoryTranslations: { [key: string]: string } = {
   "smartphones": "Smartphones",
   "laptops": "Notebooks",
@@ -38,6 +40,7 @@ const categoryTranslations: { [key: string]: string } = {
   "sunglasses": "Óculos de Sol"
 };
 
+// Ordem de exibição das categorias na página
 const categoryOrder = [
   "womens-dresses",
   "womens-shoes",
@@ -63,18 +66,20 @@ interface CategorySection {
 }
 
 export default function Products() {
+  // Estados para gerenciar produtos, loading e modal
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
   const [categorySections, setCategorySections] = useState<CategorySection[]>([]);
   const { addToCart } = useCart();
 
+  // Busca produtos da API e organiza por categorias
   useEffect(() => {
     fetch('https://dummyjson.com/products?limit=100')
       .then(res => res.json())
       .then((data) => {
         setProducts(data.products);
-        // Agrupar produtos por categoria e ordenar conforme categoryOrder
+        // Agrupa produtos por categoria seguindo a ordem definida
         const sections = categoryOrder
           .map(category => ({
             category,
@@ -108,6 +113,7 @@ export default function Products() {
     return categoryTranslations[category] || category;
   };
 
+  // Configurações do carrossel de produtos
   const sliderSettings = {
     dots: true,
     infinite: false,
@@ -149,7 +155,7 @@ export default function Products() {
 
   return (
     <div className="space-y-12">
-      {/* Hero Section */}
+      {/* Seção Hero com mascote e mensagem de boas-vindas */}
       <div className="relative bg-gradient-to-r from-blue-600 to-indigo-600 text-white py-16 px-4 rounded-2xl overflow-hidden">
         <div className="relative z-10 max-w-4xl mx-auto flex items-center justify-between">
           <div className="text-left max-w-2xl">
@@ -160,6 +166,7 @@ export default function Products() {
               Descubra produtos incríveis em todas as categorias
             </p>
           </div>
+          {/* Mascote com balão de diálogo estilo quadrinhos */}
           <div className="hidden md:block w-64 h-64 relative group">
             <img
               src="/src/assets/mascot.png"
@@ -174,12 +181,13 @@ export default function Products() {
             </div>
           </div>
         </div>
+        {/* Padrão de fundo decorativo */}
         <div className="absolute inset-0 opacity-20">
           <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHZpZXdCb3g9IjAgMCA2MCA2MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxnIGZpbGw9IiNGRkYiIGZpbGwtb3BhY2l0eT0iLjUiPjxwYXRoIGQ9Ik0zNiAxOGMzLjMxNCAwIDYgMi42ODYgNiA2cy0yLjY4NiA2LTYgNi02LTIuNjg2LTYtNiAyLjY4Ni02IDYtNnptMC0yYTggOCAwIDEwMCAxNiA4IDggMCAwMDAtMTZ6Ii8+PC9nPjwvZz48L3N2Zz4=')] bg-repeat"></div>
         </div>
       </div>
 
-      {/* Category Sections */}
+      {/* Seções de categorias com carrossel de produtos */}
       {categorySections.map(section => (
         <div key={section.category} className="space-y-6">
           <div className="flex justify-between items-center">
