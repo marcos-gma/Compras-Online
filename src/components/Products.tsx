@@ -11,26 +11,56 @@ interface Product {
   image: string;
   description: string;
   category: string;
+  thumbnail: string;
+  images: string[];
+  brand: string;
+  rating: number;
+  stock: number;
 }
 
 const categoryTranslations: { [key: string]: string } = {
-  "men's clothing": "Moda Masculina",
-  "women's clothing": "Moda Feminina",
-  "jewelery": "Joias",
-  "electronics": "Eletrônicos",
+  "smartphones": "Smartphones",
+  "laptops": "Notebooks",
+  "fragrances": "Perfumes",
+  "skincare": "Cuidados com a Pele",
+  "groceries": "Mercearia",
+  "home-decoration": "Decoração",
+  "furniture": "Móveis",
+  "tops": "Camisetas",
+  "womens-dresses": "Vestidos",
+  "womens-shoes": "Calçados Femininos",
+  "mens-shirts": "Camisas Masculinas",
+  "mens-shoes": "Calçados Masculinos",
+  "mens-watches": "Relógios Masculinos",
+  "womens-watches": "Relógios Femininos",
+  "womens-bags": "Bolsas",
+  "womens-jewellery": "Joias",
+  "sunglasses": "Óculos de Sol"
 };
+
+const categoryOrder = [
+  "womens-dresses",
+  "womens-shoes",
+  "womens-bags",
+  "womens-jewellery",
+  "womens-watches",
+  "mens-shirts",
+  "mens-shoes",
+  "mens-watches",
+  "sunglasses",
+  "fragrances",
+  "skincare",
+  "laptops",
+  "smartphones",
+  "home-decoration",
+  "furniture",
+  "groceries"
+];
 
 interface CategorySection {
   category: string;
   products: Product[];
 }
-
-const categoryOrder = [
-  "women's clothing",
-  "men's clothing",
-  "jewelery",
-  "electronics"
-];
 
 export default function Products() {
   const [products, setProducts] = useState<Product[]>([]);
@@ -40,15 +70,17 @@ export default function Products() {
   const { addToCart } = useCart();
 
   useEffect(() => {
-    fetch('https://fakestoreapi.com/products')
+    fetch('https://dummyjson.com/products?limit=100')
       .then(res => res.json())
-      .then((data: Product[]) => {
-        setProducts(data);
+      .then((data) => {
+        setProducts(data.products);
         // Agrupar produtos por categoria e ordenar conforme categoryOrder
-        const sections = categoryOrder.map(category => ({
-          category,
-          products: data.filter(product => product.category === category)
-        }));
+        const sections = categoryOrder
+          .map(category => ({
+            category,
+            products: data.products.filter((product: Product) => product.category === category)
+          }))
+          .filter(section => section.products.length > 0);
         setCategorySections(sections);
         setLoading(false);
       })
@@ -69,7 +101,7 @@ export default function Products() {
   const handleAddToCart = (e: React.MouseEvent, product: Product) => {
     e.preventDefault();
     e.stopPropagation();
-    addToCart({ ...product, quantity: 1 });
+    addToCart({ ...product, image: product.thumbnail, quantity: 1 });
   };
 
   const getTranslatedCategory = (category: string) => {
@@ -119,13 +151,28 @@ export default function Products() {
     <div className="space-y-12">
       {/* Hero Section */}
       <div className="relative bg-gradient-to-r from-blue-600 to-indigo-600 text-white py-16 px-4 rounded-2xl overflow-hidden">
-        <div className="relative z-10 max-w-3xl mx-auto text-center">
-          <h1 className="text-4xl md:text-5xl font-bold mb-4">
-            Bem-vindo à nossa loja
-          </h1>
-          <p className="text-lg md:text-xl opacity-90">
-            Descubra produtos incríveis em todas as categorias
-          </p>
+        <div className="relative z-10 max-w-4xl mx-auto flex items-center justify-between">
+          <div className="text-left max-w-2xl">
+            <h1 className="text-4xl md:text-5xl font-bold mb-4">
+              Bem-vindo à nossa loja
+            </h1>
+            <p className="text-lg md:text-xl opacity-90">
+              Descubra produtos incríveis em todas as categorias
+            </p>
+          </div>
+          <div className="hidden md:block w-64 h-64 relative group">
+            <img
+              src="/src/assets/mascot.png"
+              alt="Mascote da loja"
+              className="absolute bottom-0 right-0 w-full h-full object-contain transform hover:scale-110 transition-transform duration-300"
+            />
+            <div className="absolute bottom-full right-0 mb-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+              <div className="relative bg-white border-2 border-black text-black font-bold text-sm py-3 px-4 rounded-xl shadow-lg whitespace-nowrap">
+                Assine agora o Amazona Prime Video!
+                <div className="absolute -bottom-2 right-12 w-4 h-4 bg-white border-r-2 border-b-2 border-black transform rotate-45"></div>
+              </div>
+            </div>
+          </div>
         </div>
         <div className="absolute inset-0 opacity-20">
           <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHZpZXdCb3g9IjAgMCA2MCA2MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxnIGZpbGw9IiNGRkYiIGZpbGwtb3BhY2l0eT0iLjUiPjxwYXRoIGQ9Ik0zNiAxOGMzLjMxNCAwIDYgMi42ODYgNiA2cy0yLjY4NiA2LTYgNi02LTIuNjg2LTYtNiAyLjY4Ni02IDYtNnptMC0yYTggOCAwIDEwMCAxNiA4IDggMCAwMDAtMTZ6Ii8+PC9nPjwvZz48L3N2Zz4=')] bg-repeat"></div>
@@ -155,7 +202,7 @@ export default function Products() {
                     >
                       <div className="relative aspect-square mb-4 group">
                         <img
-                          src={product.image}
+                          src={product.thumbnail}
                           alt={product.title}
                           className="absolute inset-0 w-full h-full object-contain group-hover:opacity-75 transition-opacity"
                         />
@@ -178,10 +225,34 @@ export default function Products() {
                           </div>
                         </div>
                       </div>
-                      <h3 className="text-lg font-semibold mb-2 line-clamp-2 min-h-[3.5rem]">
-                        {product.title}
-                      </h3>
-                      <div className="flex justify-between items-end">
+                      <div className="space-y-2">
+                        <p className="text-sm text-blue-600 font-medium">
+                          {product.brand}
+                        </p>
+                        <h3 className="text-lg font-semibold line-clamp-2 min-h-[3.5rem]">
+                          {product.title}
+                        </h3>
+                        <div className="flex items-center space-x-1">
+                          {[...Array(5)].map((_, i) => (
+                            <svg
+                              key={i}
+                              className={`w-4 h-4 ${
+                                i < Math.round(product.rating)
+                                  ? "text-yellow-400"
+                                  : "text-gray-300"
+                              }`}
+                              fill="currentColor"
+                              viewBox="0 0 20 20"
+                            >
+                              <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                            </svg>
+                          ))}
+                          <span className="text-sm text-gray-600">
+                            ({product.rating})
+                          </span>
+                        </div>
+                      </div>
+                      <div className="flex justify-between items-end mt-4">
                         <span className="text-xl font-bold text-blue-600">
                           R${product.price.toFixed(2)}
                         </span>
@@ -215,7 +286,10 @@ export default function Products() {
           >
             <div className="p-6">
               <div className="flex justify-between items-start mb-4">
-                <h2 className="text-2xl font-bold text-gray-800">{selectedProduct.title}</h2>
+                <div>
+                  <h2 className="text-2xl font-bold text-gray-800">{selectedProduct.title}</h2>
+                  <p className="text-blue-600 font-medium">{selectedProduct.brand}</p>
+                </div>
                 <button
                   onClick={closeModal}
                   className="text-gray-500 hover:text-gray-700 transition-colors"
@@ -239,20 +313,44 @@ export default function Products() {
               <div>
                 <div className="aspect-square w-full max-w-md mx-auto mb-6">
                   <img
-                    src={selectedProduct.image}
+                    src={selectedProduct.thumbnail}
                     alt={selectedProduct.title}
                     className="w-full h-full object-contain"
                   />
                 </div>
                 <div className="space-y-4">
+                  <div className="flex items-center space-x-1">
+                    {[...Array(5)].map((_, i) => (
+                      <svg
+                        key={i}
+                        className={`w-5 h-5 ${
+                          i < Math.round(selectedProduct.rating)
+                            ? "text-yellow-400"
+                            : "text-gray-300"
+                        }`}
+                        fill="currentColor"
+                        viewBox="0 0 20 20"
+                      >
+                        <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                      </svg>
+                    ))}
+                    <span className="text-sm text-gray-600">
+                      ({selectedProduct.rating})
+                    </span>
+                  </div>
                   <p className="text-sm text-blue-600 font-medium">
                     {getTranslatedCategory(selectedProduct.category)}
                   </p>
                   <p className="text-gray-600">{selectedProduct.description}</p>
                   <div className="flex justify-between items-center">
-                    <span className="text-3xl font-bold text-gray-800">
-                      R${selectedProduct.price.toFixed(2)}
-                    </span>
+                    <div>
+                      <span className="text-3xl font-bold text-gray-800">
+                        R${selectedProduct.price.toFixed(2)}
+                      </span>
+                      <p className="text-sm text-gray-600">
+                        Estoque: {selectedProduct.stock} unidades
+                      </p>
+                    </div>
                     <button
                       onClick={(e) => {
                         handleAddToCart(e, selectedProduct);
